@@ -1,0 +1,117 @@
+html {
+    height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    height: 100%;
+    min-width: 490px;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    text-align: left;
+    padding-left: 40px;
+    font-size: 11px;
+    height:50px;
+    display:flex;
+    align-items: center;
+
+}
+
+footer {
+    background-color: white;
+    color: green;
+    padding: 10px;
+    text-align: left;
+    padding-left: 40px;
+    font-size: 14px;
+}
+
+
+#header_logo{
+    margin-block-start: 0.1em;
+    margin-block-end: 0em;
+    color:#fff;
+}
+#header_logo a{
+    color:#fff;
+    text-decoration: none;
+}
+
+
+
+
+
+
+
+
+#Progress_Status {
+    width: 50%;
+    background-color: #ddd;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin: 10px 0;
+    display: none;
+    position: fixed;
+    left: 25%;
+    top: 80%;
+    min-width:350px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#myprogressBar {
+    width: 0;
+    height: 40px;
+    background-color: #9C3A25;
+    border-radius: 10px;
+    transition: width 0.3s ease-in-out;
+    position: relative;
+}
+#progressBarText {
+    position: absolute;
+    top: 0;
+    width: 150px;
+    color: white;
+    display: inline-block;
+}
+
+
+#tools_button {
+  background-color: #8a8a8a00;
+  color: #fff;
+  border: none;
+
+  cursor: pointer;
+  margin-left: 10px;
+  display:flex;
+  align-items: center;
+  height:100%;
+  border-bottom: 2px solid #bbbbbb;
+  padding-bottom: 1px;
+
+}
+
+.icon-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 1px;
+  margin-right:10px;
+}
+
+.icon-square {
+  width: 3px;
+  height: 3px;
+  background-color:#bbbbbb;
+}
+
+
+
+
+
+

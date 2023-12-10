@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Merge PDF - AutoPDFForge</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/merge.css') }}">
+    <script src="{{url_for('static', filename='scripts/merge.js')}}"></script>
+
+</head>
+<body>
+    <header>
+        <h1 id="header_logo">
+            <a href="/" >AutoPDFForge</a>
+        </h1>
+    </header>
+    <main>
+
+
+
+        <div id="center_div">
+            <p style="font-size: 25px;"><strong>Merge PDF</strong></p>
+            <div id="dropArea">
+                <div id="uploadForm">
+                <form action="http://localhost:5000/merge" method="POST" enctype="multipart/form-data">
+                    <label id="uploadButton"><b>Choose files</b></label>
+                    <input type="file" name="files[]" accept="application/.pdf, .pdf" id="fileInput" style="display: none;" autocomplete="off" multiple />
+                </form>
+                <p style="margin-top: 0; color: white;">... or drop files here</p>
+                </div>
+                <div id="previewArea">
+                    <h3 class="uploaded" style="display: none;">Uploaded Documents</h3>
+                    <!-- <div class="showfilebox">
+                        <div class="left">
+                            <span class="filetype">Pdf</span>
+                            <h3>Ravi Web-pdf</h3>
+                        </div>
+                        <div class="right">
+                            <span>&#215;</span>
+                        </div>
+                    </div> -->
+                 </div>
+            </div>
+
+
+
+            <div style="margin-top: 20px; "><button type="submit" id="submitFilesButton" style="display: none;">Merge PDF</button></div>
+        </div>
+
+
+
+    </main>
+    <div id="Progress_Status">
+        <div id="myprogressBar"><span id="progressBarText">Opening 0%</span></div>
+    </div>
+    <footer>
+        <h1>AutoPDFForge</h1>
+    </footer>
+</body>
+</html>
+
+
+

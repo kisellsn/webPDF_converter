@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Result PDF - AutoPDFForge</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/result_pdf.css') }}">
+    <script src="{{url_for('static', filename='scripts/result_pdf.js')}}"></script>
+
+</head>
+<body>
+    <header>
+        <h1 id="header_logo">
+            <a href="/" >AutoPDFForge</a>
+        </h1>
+    </header>
+    <main>
+
+        <div id="left_div">
+            <embed src="show_file/{{filename}}#toolbar=0" type="application/pdf" width="100%" height="100%" />
+        </div>
+        <div id="right_div">
+            <div id="name_field">
+                <div class="form__group">
+                  <input type="input" class="form__field" placeholder="{{filename}}" name="result" id='name' required />
+                </div>
+                <p style="opacity: 0.5;">.pdf</p>
+            </div>
+            <div class="size_field">
+                <p style="opacity: 0.3;">{{filesize}} mb -</p>
+                <p style="opacity: 0.3; margin-left: 5px;">{{pages_count}} pages</p>
+            </div>
+            <button id="load_button">
+                <p style="font-family: Arial, sans-serif; font-size: 14px; padding-left:10px; color: white;">Download</p>
+                <div id="btn-download">
+                    <svg width="22px" height="16px" viewBox="0 0 22 16">
+                        <path d="M2,10 L6,13 L12.8760559,4.5959317 C14.1180021,3.0779974 16.2457925,2.62289624 18,3.5 L18,3.5 C19.8385982,4.4192991 21,6.29848669 21,8.35410197 L21,10 C21,12.7614237 18.7614237,15 16,15 L1,15" id="check"></path>
+                        <polyline points="4.5 8.5 8 11 11.5 8.5" class="svg-out"></polyline>
+                        <path d="M8,1 L8,11" class="svg-out"></path>
+                    </svg>
+                </div>
+
+            </button>
+        </div>
+
+
+
+    </main>
+</body>
+</html>

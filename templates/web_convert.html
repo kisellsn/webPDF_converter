@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Webpage to PDF - AutoPDFForge</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/web_convert.css') }}">
+    <script src="{{url_for('static', filename='scripts/web_convert.js')}}"></script>
+
+</head>
+<body>
+    <header>
+        <h1 id="header_logo">
+            <a href="/" >AutoPDFForge</a>
+        </h1>
+    </header>
+    <main>
+
+
+
+        <div id="center_div">
+            <p style="font-size: 25px;"><strong>Webpage to PDF</strong></p>
+            <div id="dropArea">
+                <div class="form-group">
+                    <span>https://</span>
+                    <input id="linkInput" class="form-field" type="text" placeholder="domain.tld">
+                </div>
+            </div>
+
+
+
+            <div style="margin-top: 20px; "><button type="submit" id="submitFilesButton" style="display: none;">Convert to PDF</button></div>
+        </div>
+
+
+
+    </main>
+    <div id="Progress_Status">
+        <div id="myprogressBar"><span id="progressBarText">Opening 0%</span></div>
+    </div>
+    <footer>
+        <h1>AutoPDFForge</h1>
+    </footer>
+</body>
+</html>
+
+
+
