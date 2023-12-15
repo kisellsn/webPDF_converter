@@ -15,30 +15,42 @@
     </header>
     <main>
 
-        <div id="left_div" data-files="{{ files | tojson | safe }}">
-            <div class="showfilebox">
-                <div class="left">
-                    <span class="filetype">Pdf</span>
-                    <div class="pdf_info">
-                        <div class="form__group">
-                          <input type="input" class="form__field_pdf" placeholder="{{files[0].file_name}}" name="result"  required />
+
+        <div id="left_div">
+            {% block body %}
+            {% for file in files %}
+
+                <div class="showfilebox">
+                    <div class="left">
+                        <span class="filetype" onclick='toggleFilePreview("{{file.file_name}}")' >
+                            Pdf</span>
+                        <div class="pdf_info">
+                            <div class="form__group">
+                              <input type="input" class="form__field_pdf" placeholder="{{file.name}}" name="result" id="{{file.file_name}}" required />
+                            </div>
+                            <div class="size_field_pdf" >
+                                <p >{{file.file_size}} mb -</p>
+                                <p >{{file.pages_count}} pages</p>
+                            </div>
                         </div>
-                        <div class="size_field_pdf" >
-                            <p >{{files[0].file_size}} mb -</p>
-                            <p >{{files[0].pages_count}} pages</p>
+                    </div>
+                    <div class="right">
+                         <div class="btn-download" data-file-name="{{ file.file_name }}" data-file-path="{{ file.path }}">
+                            <svg width="22px" height="16px" viewBox="0 0 22 16">
+                                <path d="M2,10 L6,13 L12.8760559,4.5959317 C14.1180021,3.0779974 16.2457925,2.62289624 18,3.5 L18,3.5 C19.8385982,4.4192991 21,6.29848669 21,8.35410197 L21,10 C21,12.7614237 18.7614237,15 16,15 L1,15" id="check"></path>
+                                <polyline points="4.5 8.5 8 11 11.5 8.5" class="svg-out"></polyline>
+                                <path d="M8,1 L8,11" class="svg-out"></path>
+                            </svg>
                         </div>
                     </div>
                 </div>
-                <div class="right">
-                     <div class="btn-download">
-                        <svg width="22px" height="16px" viewBox="0 0 22 16">
-                            <path d="M2,10 L6,13 L12.8760559,4.5959317 C14.1180021,3.0779974 16.2457925,2.62289624 18,3.5 L18,3.5 C19.8385982,4.4192991 21,6.29848669 21,8.35410197 L21,10 C21,12.7614237 18.7614237,15 16,15 L1,15" id="check"></path>
-                            <polyline points="4.5 8.5 8 11 11.5 8.5" class="svg-out"></polyline>
-                            <path d="M8,1 L8,11" class="svg-out"></path>
-                        </svg>
-                    </div>
+                 <div id="{{file.file_name}}Preview" class="file-preview" style="display: none;" >
+                    <embed src="show_file/{{file.name}}#scrollbar=0" type="application/pdf" width="70%" height="100%" class="file-preview-content" />
+                     <button onclick="hidePreview('{{file.file_name}}')">X</button>
                 </div>
-            </div>
+            {% endfor %}
+            {% endblock %}
+
         </div>
         <div id="right_div">
             <div id="name_field">

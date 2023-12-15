@@ -18,7 +18,8 @@
 
 
         <div id="center_div">
-            <p style="font-size: 25px;"><strong>Convert to PDF</strong></p>
+            <p style="font-size: 25px; margin-bottom: 9px;"><strong>Convert to PDF</strong></p>
+            <p style="color: #919191;margin-bottom: 36px;margin-top: 0px;">Convert Word, Excel, images and other files to PDF</p>
             <div id="dropArea">
                 <div id="uploadForm">
                 <form action="http://localhost:5000/upload" method="POST" enctype="multipart/form-data">
@@ -52,9 +53,24 @@
     <div id="Progress_Status">
         <div id="myprogressBar"><span id="progressBarText">Opening 0%</span></div>
     </div>
-    <footer>
-        <h1>AutoPDFForge</h1>
-    </footer>
+    <div class="footer-basic">
+        <footer>
+            <div class="social"><a href="https://github.com/kisellsn"><i class="icon ion-social-github"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="/">Home</a></li>
+                <li class="list-inline-item"><a href="#">About</a></li>
+                <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+                <li class="list-inline-item">
+                    {% if user_authenticated %}
+                        <a href="{{ url_for('logout') }}">LogOut</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">LogIn</a>
+                    {% endif %}
+                </li>
+            </ul>
+            <p class="copyright">AutoPDFForge © 2023</p>
+        </footer>
+    </div>
 </body>
 </html>
 

@@ -12,22 +12,6 @@
         <h1 id="header_logo">
             <a href="/" >AutoPDFForge</a>
         </h1>
-        <button id="tools_button">
-
-            <div class="icon-container">
-                <div class="icon-square"></div>
-                <div class="icon-square"></div>
-                <div class="icon-square"></div>
-                <div class="icon-square"></div>
-                <div class="icon-square"></div>
-                <div class="icon-square"></div>
-                <div class="icon-square"></div>
-                <div class="icon-square"></div>
-                <div class="icon-square"></div>
-            </div>
-
-            <p>Tools</p>
-        </button>
     </header>
     <main>
 
@@ -53,6 +37,11 @@
                     <svg viewBox="-5 -5 110 110" preserveAspectRatio="none" aria-hidden="true">
                       <path d="M0,0 C0,0 100,0 100,0 C100,0 100,100 100,100 C100,100 0,100 0,100 C0,100 0,0 0,0"/></svg>
                 </button>
+                <button class="function-buttons" id="split_f">
+                    <span>Split</span>
+                    <svg viewBox="-5 -5 110 110" preserveAspectRatio="none" aria-hidden="true">
+                      <path d="M0,0 C0,0 100,0 100,0 C100,0 100,100 100,100 C100,100 0,100 0,100 C0,100 0,0 0,0"/></svg>
+                </button>
 
             </div>
         </div>
@@ -62,8 +51,26 @@
     <div id="Progress_Status">
         <div id="myprogressBar"><span id="progressBarText">Opening 0%</span></div>
     </div>
-    <footer>
-        <h1>AutoPDFForge</h1>
-    </footer>
+    <div class="footer-basic">
+        <footer>
+            <div class="social"><a href="https://github.com/kisellsn"><i class="icon ion-social-github"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="/">Home</a></li>
+                <li class="list-inline-item"><a href="#">About</a></li>
+                <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+                <li class="list-inline-item">
+                    {% if user_authenticated %}
+                        <a href="{{ url_for('logout') }}">LogOut</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">LogIn</a>
+                    {% endif %}
+
+                </li>
+            </ul>
+
+
+            <p class="copyright">AutoPDFForge © 2023</p>
+        </footer>
+    </div>
 </body>
 </html>

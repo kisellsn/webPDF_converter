@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Merge PDF - AutoPDFForge</title>
+    <title>Split PDF - AutoPDFForge</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/merge.css') }}">
-    <script src="{{url_for('static', filename='scripts/merge.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/split.css') }}">
+    <script src="{{url_for('static', filename='scripts/split.js')}}"></script>
 
 </head>
 <body>
@@ -18,11 +18,12 @@
 
 
         <div id="center_div">
-            <p style="font-size: 25px; margin-bottom: 9px;"><strong>Merge PDF</strong></p>
-            <p style="color: #919191;margin-bottom: 36px;margin-top: 0px;">Combine or join multiple files into a single PDF quickly and easily</p>
+            <p style="font-size: 25px; margin-bottom: 9px;"><strong>Split PDF</strong></p>
+            <p style="color: #919191;margin-bottom: 36px;margin-top: 0px;">Split PDF files and save split pages afterwards</p>
+
             <div id="dropArea">
                 <div id="uploadForm">
-                <form action="http://localhost:5000/merge" method="POST" enctype="multipart/form-data">
+                <form action="http://localhost:5000/split" method="POST" enctype="multipart/form-data">
                     <label id="uploadButton"><b>Choose files</b></label>
                     <input type="file" name="files[]" accept="application/.pdf, .pdf" id="fileInput" style="display: none;" autocomplete="off" multiple />
                 </form>
@@ -44,7 +45,7 @@
 
 
 
-            <div style="margin-top: 20px; "><button type="submit" id="submitFilesButton" style="display: none;">Merge PDF</button></div>
+            <div style="margin-top: 20px; "><button type="submit" id="submitFilesButton" style="display: none;">Split PDF</button></div>
         </div>
 
 

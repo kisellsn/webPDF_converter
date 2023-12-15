@@ -53,15 +53,15 @@ main {
     padding: 20px;
     text-align: center;
     cursor: pointer;
-    background-color: #b3a12f91;
-    outline: 10px solid #b3a12f91;
+    background-color: #20412291;
+    outline: 10px solid #20412291;
     border: 3px dashed #fff;
     border-radius: 10px;
 
 
 }
 #dropArea.dragover {
-    background-color: #b3a12fc2;
+    background-color: #204122b5;
     color: #000;
 }
 

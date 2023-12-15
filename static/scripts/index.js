@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var convertButton = document.getElementById('convert_f');
     var webConvertButton = document.getElementById('webconvert_f');
     var mergeButton = document.getElementById('merge_f');
+    var splitButton = document.getElementById('split_f');
 
     convertButton.addEventListener('click', function() {
         window.location.href = 'convert_to_pdf';
@@ -50,6 +51,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     mergeButton.addEventListener('click', function() {
         window.location.href = 'merge_pdf';
+    });
+
+    splitButton.addEventListener('click', function() {
+        window.location.href = 'split_pdf';
     });
 });
 

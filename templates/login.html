@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login - AutoPDFForge</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/login.css') }}">
+    <script src="{{url_for('static', filename='scripts/login.js')}}"></script>
+</head>
+<body>
+    <div class="background">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    <form method="Post" action="">
+        <h3>Login Here</h3>
+        {{form.hidden_tag()}}
+        <label>Username</label>
+        {{form.username}}
+        <label>Password</label>
+        {{form.password}}
+
+        {{form.submit(class="custom-submit")}}
+        <div class="social">
+          <div class="go"><i class="fab fa-google"></i>  Google</div>
+        </div>
+        <div id="singup">
+          <a href="{{url_for('register')}}">Don`t have an account? Sing Up</a>
+        </div>
+
+
+    </form>
+</body>
+</html>

@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var centerDiv = document.getElementById("center_div");
     var dropArea = document.getElementById("dropArea");
 
+    var uploadedFiles = [];
+
     function resizeBlocks() {
         var dropAreaHeight = dropArea.offsetHeight;
         main.style.height = dropAreaHeight +130+ "px";
@@ -56,6 +58,8 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(files);
         files.forEach((file) => {
             if (isValidFile(file)) {
+                uploadedFiles.push(file);
+                console.log(uploadedFiles)
                 fileshow(file.name.split('.').slice(0, -1).join('.'), file.name.split('.').pop().toLowerCase());
             } else {
                 alert('Invalid file format. Allowed extensions: .pdf');
@@ -72,9 +76,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var formData = new FormData();
         var fileInputArray = Array.from(fileInputFiles);
+        console.log(uploadedFiles)
 
         for (var i = 0; i < selectedFiles.length; i++) {
-            var matchingFile = fileInputArray.find(file => file.name === selectedFiles[i].fileName + '.' + selectedFiles[i].fileType);
+            var matchingFile = uploadedFiles.find(file => file.name === selectedFiles[i].fileName + '.' + selectedFiles[i].fileType);
 
             if (matchingFile) {
                 formData.append('files[]', matchingFile);
@@ -128,6 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(files);
         files.forEach((file) => {
              if (isValidFile(file)) {
+                 uploadedFiles.push(file);
+                 console.log(uploadedFiles)
                  fileshow(file.name.split('.').slice(0, -1).join('.'), file.name.split('.').pop().toLowerCase());
              } else {
                  alert('Invalid file format. Allowed extensions: .pdf');
