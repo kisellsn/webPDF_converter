@@ -102,7 +102,7 @@ input{
   margin-top: 18px;
   display: flex;
 }
-.social div{
+.social a{
   background: red;
   width: 100%;
   border-radius: 3px;
@@ -111,7 +111,7 @@ input{
   color: #eaf0fb;
   text-align: center;
 }
-.social div:hover{
+.social a:hover{
   background-color: rgba(255,255,255,0.47);
 }
 .social .fb{

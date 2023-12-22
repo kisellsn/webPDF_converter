@@ -17,15 +17,17 @@
 
 
 
-        <div id="center_div">
+        <div id="left_div">
             <p style="font-size: 1.2em; font-weight: 400; ">Profile</p>
             <p style="font-size: 2.25em; font-weight: 700; margin-bottom: 66px; margin-top: 0px;">{{ current_user.username }}</p>
-
+            <p style="font-size: 1.00em; font-weight: 400;">Here you can see all your files</p>
+        </div>
+        <div id = "right_div">
             {% for file in user_files %}
 
                 <div class="showfilebox">
                     <div class="left">
-                        <span class="filetype" onclick='toggleFilePreview({{file.id}})' >
+                        <span class="filetype" onclick='toggleFilePreview("{{file.id}}")' >
                             Pdf</span>
                         <div class="pdf_info">
                             <div class="form__group">

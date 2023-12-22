@@ -50,7 +50,7 @@ main {
   font-family: Arial, sans-serif;
 
 }
-.form__field:placeholder {
+.form__field::placeholder {
       color: transparent;
     }
 
@@ -96,7 +96,7 @@ main {
   font-family: Arial, sans-serif;
 
 }
-.form__field_pdf:placeholder {
+.form__field_pdf::placeholder {
       color: transparent;
     }
 .form__field_pdf:placeholder-shown ~ .form__label {
@@ -225,7 +225,7 @@ main {
 }
 
 .btn-download.downloaded svg path#check {
-  stroke: stroke: #FFFFFF;
+    stroke: #FFFFFF;
   stroke-dashoffset: 174;
   transition-delay: 0.4s;
 }

@@ -47,7 +47,7 @@ main {
   font-family: Arial, sans-serif;
 
 }
-.form__field:placeholder {
+.form__field::placeholder {
       color: transparent;
     }
 
@@ -155,7 +155,7 @@ main {
 }
 
 #btn-download.downloaded svg path#check {
-  stroke: stroke: #FFFFFF;
+  stroke: #FFFFFF;
   stroke-dashoffset: 174;
   transition-delay: 0.4s;
 }
