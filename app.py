@@ -14,7 +14,7 @@ from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 
-from backend.functions import *
+from backend_func.functions import *
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 CORS(app)
@@ -35,8 +35,6 @@ from oauthlib.oauth2 import WebApplicationClient
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
 GOOGLE_DISCOVERY_URL = os.environ.get("GOOGLE_DISCOVERY_URL", None)
-
-#GOOGLE_CLIENT_ID = json.load(open('conf.json', 'r+'))['web']['client_id']
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
@@ -241,7 +239,8 @@ def result_pdf(filename):
 
 @app.route("/result_pdfs/<zipName>")
 def result_pdfs(zipName):
-    files = [file_info for file_info in read_folder(RESULT_FOLDER) if file_info["file_name"].split('.')[-1] == "pdf"]
+    infos = read_folder(RESULT_FOLDER)
+    files = [file_info for file_info in infos if file_info["file_extension"] == ".pdf"]
     if current_user.is_authenticated:
         for file in files:
             new_file = File(filename=file["file_name"], data=file["file_data"], user=current_user, file_size = file["file_size"])
@@ -250,7 +249,7 @@ def result_pdfs(zipName):
 
 
     make_zip(zipName)
-    zip_file_size = os.path.getsize(os.path.join(RESULT_FOLDER, f'{zipName}.zip'))
+    zip_file_size = os.path.getsize(f"backend_func/result_zip/{zipName}.zip")
     return render_template("result_pdfs.html",
                            filename=zipName,
                            filesize=round(zip_file_size / 1024 / 1024, 2),
@@ -260,16 +259,12 @@ def result_pdfs(zipName):
 @app.route("/upload", methods = ['GET', 'POST'])
 def uploader():
     if request.method == 'POST':
-
         files = request.files.getlist('files[]')
         for file in files:
             if file.filename == '':
                 print("there is no file")
-                return 'redirect(request.url)'
             if file and allowed_file(file.filename):
                 file_converter(file)
-            else:
-                pass
         return make_response(jsonify({
             "message": "success"
         }), 200)
@@ -283,7 +278,7 @@ def merger():
             if '.' in file.filename and file.filename.rsplit('.', 1)[-1].lower()=='pdf':
                 merger_obj.append(file)
         try:
-            merger_obj.write(os.path.join(RESULT_FOLDER, secure_filename("mergedPdf.pdf")))
+            merger_obj.write(os.path.join(RESULT_FOLDER, "mergedPdf.pdf"))
             merger_obj.close()
             return make_response(jsonify({
                 "message": "success"
@@ -348,8 +343,9 @@ def download():
         data = request.get_json()
         filename = data.get('filename')
         filetype= data.get('filetype')
-        file_path = f"{RESULT_FOLDER}/{filename}{filetype}"
-        download_name = data.get('newfilename', filename)
+        if filetype==".pdf": file_path = f"{RESULT_FOLDER}/{filename}{filetype}"
+        else: file_path = f"backend_func/result_zip/{filename}{filetype}"
+        download_name = secure_filename(data.get('newfilename', filename))
 
         return send_file(file_path, as_attachment=True, download_name=f"{download_name}{filetype}")
 
@@ -359,7 +355,7 @@ def download_from_db():
         data = request.get_json()
         file_id = data.get('file_id')
         filetype = data.get('filetype')
-        download_name = data.get('newfilename', data.get('filename'))
+        download_name =secure_filename(data.get('newfilename', data.get('filename')))
 
         file = File.query.get(file_id)
         if file:

@@ -11,10 +11,10 @@ import shutil
 from PyPDF2 import PdfWriter, PdfReader, PdfFileWriter, PdfFileReader
 import pandas as pd
 
-#import msoffice2pdf
 
-RESULT_FOLDER='backend/resulted_files'
-UPLOAD_FOLDER='backend/uploaded_files'
+from backend_func.cloudmersive_converter import *
+
+
 ALLOWED_EXTENSIONS = {'txt', 'png', 'jpg', 'jpeg', 'docx', 'doc', 'csv', 'xlsx'}
 
 def allowed_file(filename):
@@ -47,7 +47,7 @@ def read_folder(folder_path:str):
 
         file_stats = os.stat(file_path)
         file_size = round(file_stats.st_size / 1024 / 1024, 2)
-
+        _, file_extension = os.path.splitext(entry.name)
 
         file_info = {
             "file_name":entry.name,
@@ -55,15 +55,16 @@ def read_folder(folder_path:str):
             "pages_count": pages_count,
             "file_size": file_size,
             "name": '.'.join(entry.name.split('.')[:-1]).lower(),
-            "file_data": file_data
+            "file_data": file_data,
+            "file_extension": file_extension
         }
         files_info.append(file_info)
     return files_info
 
 
 def file_converter(file):
-    file_extension = file.filename.rsplit('.', 1)[1].lower()
-    file_name = file.filename.split('.')[0].lower()
+    file_extension = file.filename.rsplit('.', 1)[-1].lower()
+    file_name = file.filename.rsplit('.', 1)[0].lower()
 
     input_path = os.path.join(UPLOAD_FOLDER, f'{file_name}.{file_extension}')
     output_path = os.path.join(RESULT_FOLDER, f'{file_name}.pdf')
@@ -73,10 +74,8 @@ def file_converter(file):
             im = image.convert('RGB')
             im.save(output_path)
         case 'docx' | 'doc':
-
             file.save(input_path)
-            #msoffice2pdf.convert(source=input_path, output_dir="resulted_files",  soft=1)
-
+            cloudmersive_convert(input_path, output_path)
         case 'csv':
             file.save(input_path)
             CSV = pd.read_csv(input_path)
@@ -91,7 +90,7 @@ def file_converter(file):
             converter.convert(f'file:///{os.path.abspath(path_to_html)}', output_path)
         case 'txt':
             file.save(input_path)
-            with open(input_path, "r") as f:
+            with open(input_path, "r", encoding="utf-8") as f:
                 file_content = f.read()
 
             a4_width_mm = 210
@@ -103,9 +102,11 @@ def file_converter(file):
             width_text = a4_width_mm / character_width_mm
 
             pdf = FPDF(orientation='P', unit='mm', format='A4')
+            pdf.add_font("NotoSansDisplay", style="", fname="static/fonts/NotoSansDisplay-VariableFont_wdth,wght.ttf", uni=True)
+
             pdf.set_auto_page_break(True, margin=margin_bottom_mm)
             pdf.add_page()
-            pdf.set_font(family='Times', size=fontsize_pt)
+            pdf.set_font(family='NotoSansDisplay', size=fontsize_pt)
             splitted = file_content.split('\n')
 
             for line in splitted:
@@ -122,4 +123,4 @@ def file_converter(file):
             # default case
             pass
 def make_zip(zipName):
-    shutil.make_archive(os.path.join(RESULT_FOLDER, f'{zipName}'), 'zip', RESULT_FOLDER)
+    shutil.make_archive(os.path.join("backend_func/result_zip", f'{zipName}'), 'zip', RESULT_FOLDER)
