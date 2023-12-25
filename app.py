@@ -115,7 +115,7 @@ def load_user(user_id):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), nullable=False, unique=True)
+    username = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
     files = db.relationship('File', backref='user', lazy=True)
 
