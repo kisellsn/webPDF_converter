@@ -90,7 +90,7 @@ def file_converter(file):
             converter.convert(f'file:///{os.path.abspath(path_to_html)}', output_path)
         case 'txt':
             file.save(input_path)
-            with open(input_path, "r", encoding="utf-8") as f:
+            with open(input_path, "r") as f:
                 file_content = f.read()
 
             a4_width_mm = 210
