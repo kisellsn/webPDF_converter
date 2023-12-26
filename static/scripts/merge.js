@@ -58,13 +58,9 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(files);
         files.forEach((file) => {
             if (isValidFile(file)) {
-                if(isValidSize(file)){
-                    uploadedFiles.push(file);
-                    console.log(uploadedFiles)
-                    fileshow(file.name.split('.').slice(0, -1).join('.'), file.name.split('.').pop().toLowerCase());
-                }else{
-                     alert('File size exceeds the limit of 3.5 MB.');
-                }
+                uploadedFiles.push(file);
+                console.log(uploadedFiles)
+                fileshow(file.name.split('.').slice(0, -1).join('.'), file.name.split('.').pop().toLowerCase());
             } else {
                 alert('Invalid file format. Allowed extensions: .pdf');
             }
@@ -140,13 +136,9 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(files);
         files.forEach((file) => {
              if (isValidFile(file)) {
-                 if(isValidSize(file)){
-                    uploadedFiles.push(file);
-                    console.log(uploadedFiles)
-                    fileshow(file.name.split('.').slice(0, -1).join('.'), file.name.split('.').pop().toLowerCase());
-                }else{
-                     alert('File size exceeds the limit of 3.5 MB.');
-                }
+                uploadedFiles.push(file);
+                console.log(uploadedFiles)
+                fileshow(file.name.split('.').slice(0, -1).join('.'), file.name.split('.').pop().toLowerCase());
              } else {
                  alert('Invalid file format. Allowed extensions: .pdf');
              }
@@ -155,7 +147,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function isValidFile(input) {
         var allowedExtensions = ['pdf'];
-
         var fileExtension = input.name.split('.').pop().toLowerCase();
         return allowedExtensions.includes(fileExtension);
     }
