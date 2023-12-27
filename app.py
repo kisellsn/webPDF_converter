@@ -15,11 +15,10 @@ from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 
 from backend_func.functions import *
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 CORS(app)
-
-
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -28,16 +27,19 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 migrate = Migrate(app, db)
 
-
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-#---------------------------------GOOGLE---------------------------------
+# ---------------------------------GOOGLE---------------------------------
 from oauthlib.oauth2 import WebApplicationClient
+
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
 GOOGLE_DISCOVERY_URL = os.environ.get("GOOGLE_DISCOVERY_URL", None)
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
+
+
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
+
 
 @app.route("/google-login")
 def google_login():
@@ -50,6 +52,7 @@ def google_login():
         scope=["openid", "email", "profile"],
     )
     return redirect(request_uri)
+
 
 @app.route("/google-login/callback")
 def callback():
@@ -65,8 +68,8 @@ def callback():
     token_response = requests.post(token_url, headers=headers, data=body, auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET))
     client.parse_request_body_response(json.dumps(token_response.json()))
 
-    userinfo_endpoint =google_provider_cfg["userinfo_endpoint"]
-    uri,headers,body = client.add_token(userinfo_endpoint)
+    userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
+    uri, headers, body = client.add_token(userinfo_endpoint)
     userinfo_response = requests.get(uri, headers=headers, data=body)
     if userinfo_response.json().get("email_verified"):
         unique_id = userinfo_response.json()["sub"]
@@ -85,7 +88,8 @@ def callback():
             return redirect(url_for('profile'))
     return redirect(url_for('index'))
 
-#---------------------------------FILES---------------------------------
+
+# ---------------------------------FILES---------------------------------
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(100))
@@ -95,7 +99,7 @@ class File(db.Model):
     file_size = db.Column(db.Float)
 
 
-#---------------------------------USER---------------------------------
+# ---------------------------------USER---------------------------------
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -109,9 +113,11 @@ def before_request():
     else:
         app.jinja_env.globals['user_authenticated'] = False
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -122,12 +128,13 @@ class User(db.Model, UserMixin):
     def is_authenticated(self):
         return True if self.is_authenticated else False
 
+
 class RegisterForm(FlaskForm):
     username = StringField(validators=[
-                           InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
+        InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
 
     password = PasswordField(validators=[
-                             InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
+        InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
 
     submit = SubmitField('Sing Up')
 
@@ -138,14 +145,16 @@ class RegisterForm(FlaskForm):
             raise ValidationError(
                 'That username already exists. Please choose a different one.')
 
+
 class LoginForm(FlaskForm):
     username = StringField(validators=[
-                           InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
+        InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
 
     password = PasswordField(validators=[
-                             InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
+        InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
 
     submit = SubmitField('Log In')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -156,20 +165,31 @@ def login():
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
                 return redirect(url_for('profile'))
+            else:
+                return render_template('login.html', form=form,
+                                       error_message='Incorrect username or password. Please try again.')
+        else:
+            return render_template('login.html', form=form,
+                                   error_message='Incorrect username or password. Please try again.')
+
     return render_template('login.html', form=form)
 
-@ app.route('/register', methods=['GET', 'POST'])
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data)
-        new_user = User(username=form.username.data, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect(url_for('login'))
-
+        try:
+            hashed_password = bcrypt.generate_password_hash(form.password.data)
+            new_user = User(username=form.username.data, password=hashed_password)
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for('login'))
+        except ValidationError:
+            return render_template('register.html', form=form, error_message='Registration failed. Please choose a '
+                                                                             'different username.')
     return render_template('register.html', form=form)
+
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
@@ -177,7 +197,8 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-#---------------------------------PAGES---------------------------------
+
+# ---------------------------------PAGES---------------------------------
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
@@ -189,6 +210,7 @@ def profile():
             f.write(file.data)
     return render_template('profile.html', user_files=user_files)
 
+
 @app.route("/")
 def index():
     clean_folder(RESULT_FOLDER)
@@ -196,11 +218,13 @@ def index():
 
     return render_template("index.html")
 
+
 @app.route("/merge_pdf")
 def merge_pdf():
     clean_folder(RESULT_FOLDER)
     clean_folder(UPLOAD_FOLDER)
     return render_template("merge.html")
+
 
 @app.route("/split_pdf")
 def split_pdf():
@@ -208,17 +232,20 @@ def split_pdf():
     clean_folder(UPLOAD_FOLDER)
     return render_template("split.html")
 
+
 @app.route("/convert_to_pdf")
 def convert_to_pdf():
     clean_folder(RESULT_FOLDER)
     clean_folder(UPLOAD_FOLDER)
     return render_template("convert.html")
 
+
 @app.route("/convert_web_to_pdf")
 def convert_web_to_pdf():
     clean_folder(RESULT_FOLDER)
     clean_folder(UPLOAD_FOLDER)
     return render_template("web_convert.html")
+
 
 @app.route("/result_pdf/<filename>")
 def result_pdf(filename):
@@ -229,7 +256,7 @@ def result_pdf(filename):
     if current_user.is_authenticated:
         with open(file_path, 'rb') as file:
             file_data = file.read()
-        new_file = File(filename=f"{filename}.pdf", data=file_data, user=current_user, file_size = file_size)
+        new_file = File(filename=f"{filename}.pdf", data=file_data, user=current_user, file_size=file_size)
         db.session.add(new_file)
         db.session.commit()
     return render_template('result_pdf.html',
@@ -237,16 +264,17 @@ def result_pdf(filename):
                            pages_count=len(pages_count),
                            filesize=file_size)
 
+
 @app.route("/result_pdfs/<zipName>")
 def result_pdfs(zipName):
     infos = read_folder(RESULT_FOLDER)
     files = [file_info for file_info in infos if file_info["file_extension"] == ".pdf"]
     if current_user.is_authenticated:
         for file in files:
-            new_file = File(filename=file["file_name"], data=file["file_data"], user=current_user, file_size = file["file_size"])
+            new_file = File(filename=file["file_name"], data=file["file_data"], user=current_user,
+                            file_size=file["file_size"])
             db.session.add(new_file)
         db.session.commit()
-
 
     make_zip(zipName)
     zip_file_size = os.path.getsize(f"backend_func/result_zip/{zipName}.zip")
@@ -255,8 +283,9 @@ def result_pdfs(zipName):
                            filesize=round(zip_file_size / 1024 / 1024, 2),
                            files=files)
 
-#---------------------------------FUNCTIONS---------------------------------
-@app.route("/upload", methods = ['GET', 'POST'])
+
+# ---------------------------------FUNCTIONS---------------------------------
+@app.route("/upload", methods=['GET', 'POST'])
 def uploader():
     if request.method == 'POST':
         files = request.files.getlist('files[]')
@@ -269,13 +298,14 @@ def uploader():
             "message": "success"
         }), 200)
 
-@app.route("/merge", methods = ['GET', 'POST'])
+
+@app.route("/merge", methods=['GET', 'POST'])
 def merger():
     if request.method == 'POST':
         files = request.files.getlist('files[]')
         merger_obj = PdfWriter()
         for file in files:
-            if '.' in file.filename and file.filename.rsplit('.', 1)[-1].lower()=='pdf':
+            if '.' in file.filename and file.filename.rsplit('.', 1)[-1].lower() == 'pdf':
                 merger_obj.append(file)
         try:
             merger_obj.write(os.path.join(RESULT_FOLDER, "mergedPdf.pdf"))
@@ -287,6 +317,7 @@ def merger():
             return make_response(jsonify({
                 "message": "error"
             }), 400)
+
 
 @app.route("/split", methods=['POST'])
 def divider():
@@ -302,7 +333,9 @@ def divider():
                         pdf_writer = PdfWriter()
                         pdf_writer.add_page(pdf.pages[page])
 
-                        output_filename =  os.path.join(RESULT_FOLDER, '{}_page_{}.pdf'.format(file.filename.rsplit('.', 1)[0], page + 1))
+                        output_filename = os.path.join(RESULT_FOLDER,
+                                                       '{}_page_{}.pdf'.format(file.filename.rsplit('.', 1)[0],
+                                                                               page + 1))
 
                         with open(output_filename, 'wb') as out:
                             pdf_writer.write(out)
@@ -314,6 +347,7 @@ def divider():
             return make_response(jsonify({
                 "message": "error"
             }), 500)
+
 
 @app.route('/web_convert', methods=['GET', 'POST'])
 def web_converter():
@@ -331,23 +365,28 @@ def web_converter():
                 "message": "error"
             }), 400)
 
+
 @app.route("/result_pdf/show_file/<filename>")
 @app.route("/result_pdfs/show_file/<filename>")
 @app.route("/show_file/<filename>")
 def show_file(filename):
     return send_file(os.path.join(RESULT_FOLDER, f"{filename}.pdf"), as_attachment=False)
 
+
 @app.route("/download", methods=['GET', 'POST'])
 def download():
     if request.method == 'POST':
         data = request.get_json()
         filename = data.get('filename')
-        filetype= data.get('filetype')
-        if filetype==".pdf": file_path = f"{RESULT_FOLDER}/{filename}{filetype}"
-        else: file_path = f"backend_func/result_zip/{filename}{filetype}"
+        filetype = data.get('filetype')
+        if filetype == ".pdf":
+            file_path = f"{RESULT_FOLDER}/{filename}{filetype}"
+        else:
+            file_path = f"backend_func/result_zip/{filename}{filetype}"
         download_name = secure_filename(data.get('newfilename', filename))
 
         return send_file(file_path, as_attachment=True, download_name=f"{download_name}{filetype}")
+
 
 @app.route('/DBdownload', methods=['GET', 'POST'])
 def download_from_db():
@@ -355,7 +394,7 @@ def download_from_db():
         data = request.get_json()
         file_id = data.get('file_id')
         filetype = data.get('filetype')
-        download_name =secure_filename(data.get('newfilename', data.get('filename')))
+        download_name = secure_filename(data.get('newfilename', data.get('filename')))
 
         file = File.query.get(file_id)
         if file:

@@ -23,7 +23,11 @@
         {{form.username}}
         <label>Password</label>
         {{form.password}}
-
+        {% if error_message %}
+            <div class="alert alert-danger" style="font-size: small; margin-top: 5px; color: #9C3A25">
+                {{ error_message }}
+            </div>
+        {% endif %}
         {{form.submit(class="custom-submit")}}
         <div class="social">
             <a href="/google-login" class="go"><i class="fab fa-google"></i> Google</a>

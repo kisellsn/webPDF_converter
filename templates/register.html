@@ -9,7 +9,6 @@
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/register.css') }}">
-    <script src="{{url_for('static', filename='scripts/register.js')}}"></script>
 </head>
 <body>
     <div class="background">
@@ -23,7 +22,11 @@
         {{form.username}}
         <label>Password</label>
         {{form.password}}
-
+        {% if error_message %}
+            <div class="alert alert-danger" style="font-size: small; margin-top: 5px; color: #9C3A25">
+                {{ error_message }}
+            </div>
+        {% endif %}
         {{form.submit(class="custom-submit")}}
         <div class="social">
             <a href="/google-login" class="go"><i class="fab fa-google"></i> Google</a>
@@ -31,6 +34,7 @@
         <div id="singup">
           <a href="{{url_for('login')}}">Already have an account? Log In</a>
         </div>
+
 
     </form>
 </body>
