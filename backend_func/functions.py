@@ -1,5 +1,8 @@
 import os
 
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
+import pdfkit
 import textwrap
 import PIL.Image
 from pyhtml2pdf import converter
@@ -124,3 +127,20 @@ def file_converter(file):
             pass
 def make_zip(zipName):
     shutil.make_archive(os.path.join("backend_func/result_zip", f'{zipName}'), 'zip', RESULT_FOLDER)
+
+def create_pdf(name, job, about, email, LinkedIn, github, projects):
+    template_vars = {
+        'name': name,
+        'job': job,
+        'about':about,
+        "email":email,
+        "LinkedIn":LinkedIn,
+        "github":github,
+        "projects":projects
+    }
+    path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+    config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+    env = Environment(loader=FileSystemLoader('templates'))
+    template = env.get_template('generate.html')
+    html_out = template.render(template_vars)
+    pdfkit.from_string(html_out, f'{RESULT_FOLDER}/generate.pdf', configuration=config)

@@ -40,9 +40,13 @@ document.addEventListener('DOMContentLoaded', function() {
     var webConvertButton = document.getElementById('webconvert_f');
     var mergeButton = document.getElementById('merge_f');
     var splitButton = document.getElementById('split_f');
+    var generateButton = document.getElementById('generate_f');
 
     convertButton.addEventListener('click', function() {
         window.location.href = 'convert_to_pdf';
+    });
+    generateButton.addEventListener('click', function() {
+        window.location.href = 'profile_form';
     });
 
     webConvertButton.addEventListener('click', function() {

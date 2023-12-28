@@ -246,7 +246,10 @@ def convert_web_to_pdf():
     clean_folder(UPLOAD_FOLDER)
     return render_template("web_convert.html")
 
-
+@app.route("/profile_form")
+def profile_form():
+    clean_folder(RESULT_FOLDER)
+    return render_template("generate_form.html")
 @app.route("/result_pdf/<filename>")
 def result_pdf(filename):
     file_path = os.path.join(RESULT_FOLDER, f"{filename}.pdf")
@@ -263,7 +266,6 @@ def result_pdf(filename):
                            filename=filename,
                            pages_count=len(pages_count),
                            filesize=file_size)
-
 
 @app.route("/result_pdfs/<zipName>")
 def result_pdfs(zipName):
@@ -283,8 +285,30 @@ def result_pdfs(zipName):
                            filesize=round(zip_file_size / 1024 / 1024, 2),
                            files=files)
 
-
 # ---------------------------------FUNCTIONS---------------------------------
+@app.route("/create_profile_pdf", methods=['POST'])
+def create_profile_page():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        job = request.form.get('job')
+        about = request.form.get('about')
+        email = request.form.get('email')
+        LinkedIn = request.form.get('LinkedIn')
+        github = request.form.get('github')
+
+        projects = []
+        project_count = int(request.form.get('project_count', 0))
+        print(project_count)
+        for i in range(project_count+1):
+            project_name = request.form.get(f'projects[{i}][name]')
+            project_description = request.form.get(f'projects[{i}][description]')
+            projects.append({'name': project_name, 'description': project_description})
+
+        create_pdf(name, job, about, email, LinkedIn, github, projects)
+        return make_response(jsonify({
+                "message": "success"
+            }), 200)
+
 @app.route("/upload", methods=['GET', 'POST'])
 def uploader():
     if request.method == 'POST':
@@ -297,7 +321,6 @@ def uploader():
         return make_response(jsonify({
             "message": "success"
         }), 200)
-
 
 @app.route("/merge", methods=['GET', 'POST'])
 def merger():
