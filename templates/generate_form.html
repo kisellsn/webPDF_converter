@@ -125,10 +125,7 @@
             var formData = new FormData(form);
             fetch('/create_profile_pdf',{
                 method: 'POST',
-                body: formData,
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+                body: formData
             })
             .then(response => {
                 var statusCode = response.status;

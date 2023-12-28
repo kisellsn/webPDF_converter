@@ -298,7 +298,6 @@ def create_profile_page():
 
         projects = []
         project_count = int(request.form.get('project_count', 0))
-        print(project_count)
         for i in range(project_count+1):
             project_name = request.form.get(f'projects[{i}][name]')
             project_description = request.form.get(f'projects[{i}][description]')
