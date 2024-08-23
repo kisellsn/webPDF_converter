@@ -26,6 +26,10 @@ def allowed_file(filename):
 
 
 def clean_folder(folder_path: str):
+    if not os.path.exists(folder_path):
+        print(f"Folder '{folder_path}' does not exist.")
+        return
+
     for entry in os.scandir(folder_path):
         file_path = os.path.join(folder_path, entry.name)
         try:
@@ -38,6 +42,11 @@ def clean_folder(folder_path: str):
 
 def read_folder(folder_path:str):
     files_info = []
+
+    if not os.path.exists(folder_path):
+        print(f"Folder '{folder_path}' does not exist.")
+        return files_info
+
     for entry in os.scandir(folder_path):
         file_path = os.path.join(folder_path, entry.name)
         with open(file_path, 'rb') as file:
@@ -126,9 +135,17 @@ def file_converter(file):
             # default case
             pass
 def make_zip(zipName):
-    shutil.make_archive(os.path.join("backend_func/result_zip", f'{zipName}'), 'zip', RESULT_FOLDER)
+    result_zip_dir = "backend_func/result_zip"
+
+    if not os.path.exists(result_zip_dir):
+        os.makedirs(result_zip_dir)
+
+    shutil.make_archive(os.path.join(result_zip_dir, f'{zipName}'), 'zip', RESULT_FOLDER)
 
 def create_pdf(name, job, about, email, LinkedIn, github, projects):
+    if not os.path.exists(RESULT_FOLDER):
+        os.makedirs(RESULT_FOLDER)
+
     template_vars = {
         'name': name,
         'job': job,
