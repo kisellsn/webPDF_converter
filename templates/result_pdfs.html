@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Result PDFs - AutoPDFForge</title>
+{% extends "base.html" %}
+{% block title %}Result PDFs - AutoPDFForge{% endblock %}
+{% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/result_pdfs.css') }}">
+{% endblock %}
+{% block scripts %}
     <script src="{{url_for('static', filename='scripts/result_pdfs.js')}}"></script>
-
-</head>
-<body>
-    <header>
-        <h1 id="header_logo">
-            <a href="/" >AutoPDFForge</a>
-        </h1>
-    </header>
+{% endblock %}
+{% block content %}
     <main>
 
 
@@ -78,5 +73,4 @@
 
 
     </main>
-</body>
-</html>
+{% endblock %}

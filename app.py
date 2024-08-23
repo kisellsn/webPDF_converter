@@ -14,11 +14,13 @@ from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 
+from flask_bootstrap import Bootstrap5
 from backend_func.functions import *
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 CORS(app)
+bootstrap = Bootstrap5(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -28,6 +30,11 @@ bcrypt = Bcrypt(app)
 migrate = Migrate(app, db)
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+
+@app.context_processor
+def inject_now():
+    return {'now': datetime.utcnow()}
 # ---------------------------------GOOGLE---------------------------------
 from oauthlib.oauth2 import WebApplicationClient
 
@@ -170,7 +177,7 @@ def login():
                                        error_message='Incorrect username or password. Please try again.')
         else:
             return render_template('login.html', form=form,
-                                   error_message='Incorrect username or password. Please try again.')
+                                   error_message='User does not exist. Please try again.')
 
     return render_template('login.html', form=form)
 
@@ -186,8 +193,8 @@ def register():
             db.session.commit()
             return redirect(url_for('login'))
         except ValidationError:
-            return render_template('register.html', form=form, error_message='Registration failed. Please choose a '
-                                                                             'different username.')
+            return render_template('register.html', form=form, error_message='Registration failed. '
+                                                                             'User with that username already exists.')
     return render_template('register.html', form=form)
 
 
@@ -424,4 +431,4 @@ def download_from_db():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=2222)
