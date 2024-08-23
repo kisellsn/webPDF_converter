@@ -21,7 +21,7 @@ from backend_func.functions import *
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 CORS(app)
-bootstrap = Bootstrap5(app)
+# bootstrap = Bootstrap5(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI", "sqlite:///database.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
