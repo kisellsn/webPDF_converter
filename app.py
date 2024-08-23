@@ -14,7 +14,8 @@ from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 
-from flask_bootstrap import Bootstrap5
+# from flask_bootstrap import Bootstrap5 Bootstrap_Flask==2.2.0
+
 from backend_func.functions import *
 
 app = Flask(__name__)
