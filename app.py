@@ -22,7 +22,7 @@ app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 CORS(app)
 bootstrap = Bootstrap5(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI", "sqlite:///database.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.app_context().push()
 db = SQLAlchemy(app)
@@ -431,4 +431,4 @@ def download_from_db():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=2222)
+    app.run(debug=False)
